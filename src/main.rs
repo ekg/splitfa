@@ -16,15 +16,20 @@ fn split_fasta(input: &str, seg_length: usize, step: usize) {
         let name = record.id().unwrap();
         let mut start: usize = 0;
         let total_length: usize = seq.len();
-        while start + seg_length <= total_length {
-            println!(">{}:{}-{}", name, start, start + seg_length);
-            println!("{}", str::from_utf8(&seq[start..(start + seg_length)]).unwrap());
-            start += step;
-        }
-        if start < total_length {
-            start = total_length - seg_length;
-            println!(">{}:{}-{}", name, start, start + seg_length);
-            println!("{}", str::from_utf8(&seq[start..(start + seg_length)]).unwrap());
+        if total_length < seg_length {
+            println!(">{}:{}-{}", name, 0, total_length);
+            println!("{}", str::from_utf8(&seq[0..total_length]).unwrap());
+        } else {
+            while start + seg_length <= total_length {
+                println!(">{}:{}-{}", name, start, start + seg_length);
+                println!("{}", str::from_utf8(&seq[start..(start + seg_length)]).unwrap());
+                start += step;
+            }
+            if start < total_length {
+                start = total_length - seg_length;
+                println!(">{}:{}-{}", name, start, start + seg_length);
+                println!("{}", str::from_utf8(&seq[start..(start + seg_length)]).unwrap());
+            }
         }
     }
 }
